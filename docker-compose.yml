@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  crypto_bot:
+    build: .
+    container_name: crypto_trading_bot
+    ports:
+      - "8000:8000"
+    environment:
+      - BINANCE_API_KEY=your_api_key
+      - BINANCE_SECRET_KEY=your_secret_key
+    volumes:
+      - .:/app
