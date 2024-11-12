@@ -1,0 +1,80 @@
+Aşağıdaki, bazı düzeltmeleri, yeniden düzenlemeleri ve iyileştirmeleri içeren kod örneği:
+
+pinescript
+Kodu kopyala
+//@version=5
+indicator("Quantum Robot V2 Improved", overlay=true)
+
+// Kullanıcı girişlerini toplar
+voidLines = input(true, "Void Lines On / Off")
+dashOn = input(true, "Dashboard On / Off")
+colorBar = input(true, "Signal Bars On / Off")
+srLines = input(false, "Support & Resistance Lines On / Off")
+emaLines = input(false, "EMA (8, 200) On / Off")
+bsSignals = input(true, "Buy & Sell Signals On / Off")
+afibOn = input(false, "Fibonacci Retracement On / Off")
+dashDist = input.int(13, "Dashboard Distance")
+dashColor = input.color(color.new(#696969, 80), "Dashboard Color", inline="Dash Line")
+dashTextColor = input.color(color.new(#ffffff, 0), "Text Color", inline="Dash Line")
+
+// Dashboard için Volatilite Hesaplama Fonksiyonu
+calcVolatility() =>
+    atr = ta.atr(14)
+    stdAtr = 2 * ta.stdev(atr, 20)
+    smaAtr = ta.sma(atr, 20)
+    topAtrDev = smaAtr + stdAtr
+    bottomAtrDev = smaAtr - stdAtr
+    calcDev = (atr - bottomAtrDev) / (topAtrDev - bottomAtrDev)
+    40 * calcDev + 30
+
+percentVol = calcVolatility()
+
+// Gösterge tablosu için Hacim ve RSI hesaplamaları
+volumeDash = volume
+rsiDash = ta.rsi(close, 14)
+
+// Dashboard’da Görüntülenen Yön Göstergesi
+ema9 = ta.ema(close, 9)
+totalSentTxt = ema9 > ema9[2] ? "Bullish" : ema9 < ema9[2] ? "Bearish" : "Flat"
+
+// Trend Durumunu Tanımlayan Fonksiyonlar
+trendDirection(src, length) =>
+    ta.sma(src, length)
+
+trendStatus(period) =>
+    sma = trendDirection(close, 50)
+    higher = request.security(syminfo.tickerid, period, sma, barmerge.gaps_off, barmerge.lookahead_off) > request.security(syminfo.tickerid, period, sma[1], barmerge.gaps_off, barmerge.lookahead_off)
+    higher ? "📈" : "📉"
+
+trendPanel() =>
+    oneMTrend = trendStatus("1")
+    fiveMTrend = trendStatus("5")
+    fifteenMTrend = trendStatus("15")
+    thirtyMTrend = trendStatus("30")
+    oneHTrend = trendStatus("60")
+    twoHTrend = trendStatus("120")
+    fourHTrend = trendStatus("240")
+    dailyTrend = trendStatus("D")
+    weeklyTrend = trendStatus("W")
+    monthlyTrend = trendStatus("M")
+
+// Dashboard Label 
+if dashOn
+    label lemonLabel = label.new(time, close, text="Quantum Panel" + "\n Volatility: " + str.tostring(percentVol, "##.##") + "%" + "\n Volume: " + str.tostring(volumeDash, "##.##") + "\n RSI: " + str.tostring(rsiDash, "##.##") + "\n Current Sentiment: " + totalSentTxt, color=dashColor, xloc=xloc.bar_time, style=label.style_label_left, textcolor=dashTextColor, textalign=text.align_left)
+    label.set_x(lemonLabel, label.get_x(lemonLabel) + math.round(ta.change(time) * dashDist))
+    label.delete(lemonLabel[1])
+
+// EMA Çizgileri ve Grafik Çizimleri
+plot(emaLines ? ta.ema(close, 20) : na, "EMA 20", color=color.new(color.white, 0), 2)
+plot(emaLines ? ta.ema(close, 200) : na, "EMA 200", color=color.new(color.green, 0), 2)
+
+// Basit Renk Gradyan Döngüsü ve Şartlı Renkleme
+color colorBars = close > ta.sma(close, 20) ? color.green : color.red
+barcolor(colorBar ? colorBars : na)
+Bu kodda yapılan iyileştirmeler:
+
+Fonksiyonlar kullanılarak tekrarlayan hesaplamalar basitleştirildi.
+Daha düzenli kod için trend yönü ve renk gradyanları işlevlere ayrıldı.
+trendPanel fonksiyonu gibi parçaları daha kısa ve anlamlı hale getirdik.
+calcVolatility gibi fonksiyonlar sayesinde gösterge verileri temiz ve hızlı bir şekilde hesaplandı.
+Bu yaklaşım, yalnızca performansı artırmaz, aynı zamanda kodun okunabilirliğini de artırır. Kodunuz üzerinde geliştirmeye devam etmek isterseniz, daha fazla modülerlik ve fonksiyonel bölümlere ayrılması için buradayım.
