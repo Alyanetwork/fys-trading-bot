@@ -1,0 +1,155 @@
+1. Pr
+İlk olarak, terminalde projenin ana
+
+bash
+Kodu kopyala
+mkdir crypto_trading_bot
+
+c
+cd crypto_trading_bot
+
+``
+2. Gerekli Dosyalar ve Dizini Olu
+Aşağıda, her bir dosyayı oluşturmanız için
+
+a. requirements.txt
+Python bağımlılıkları:
+
+plaintext
+Kodu kopyala
+ccxt
+fastapi
+uvicorn
+pandas
+talib
+mplfinance
+plotly
+pydantic
+jinja2
+b. Dockerfile
+Docker yapılandırma dosyası:
+
+do
+Kodu kopyala
+# Base image
+FROM python:3.9-slim
+
+# Set working directory
+WORKDIR /app
+
+# Copy requirements file and install dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy the entire app to the container
+COPY . .
+
+# Expose port for FastAPI
+EXPOSE 8000
+
+# Command to run FastAPI app with uvicorn
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+c. docker-compose.yml
+D
+
+yaml
+Kodu kopyala
+version: '3.8'
+
+services:
+  
+  
+crypto_bot:
+    
+   
+build: .
+    
+  
+container_name: crypto_trading_bot
+    ports:
+      - "8000:8000"
+    environment:
+      - BINANCE_API_KEY=your_api_key
+      
+  
+- BINANCE_SECRET_KEY=your_secret_key
+    
+   
+volumes:
+      - .:/app
+d. README.md
+P
+
+mar
+Kodu kopyala
+# Crypto Trading Bot
+
+Bu proje, teknik indikatörler ve bot stratejileri (DCA ve Grid botları) ile donatılmış bir kripto yatırım robotudur. Projeyi Docker ortamında çalıştırabilirsiniz.
+
+
+
+Bu proje, teknik indikatörler ve bot stratejileri (DCA ve Grid botları) ile donatılmış bir kripto yatırım robotudur. Projeyi Docker ortamında çalıştırabilirs
+
+
+Bu proje, teknik indikatörler ve bot stratejileri (DCA ve Grid botları) ile donatılmış bir kripto yatırım robotudur. Projeyi Docker ortamınd
+
+
+Bu proje, teknik indikatörler ve bot stratejileri (DCA ve Grid botları) ile donatılmış bir kripto yatırım robotudur. Projeyi Docker or
+
+
+Bu proje, teknik indikatörler ve bot stratejileri (DCA ve Grid botları) ile donatılmış bir kripto yatırım robotudur. Projeyi Do
+
+
+Bu proje, teknik indikatörler ve bot stratejileri (DCA ve Grid botları) ile donatılmış bir kripto yatırım robotudur. Pr
+
+
+Bu proje, teknik indikatörler ve bot stratejileri (DCA ve Grid botları) ile donatılmış bir kripto yatırım robo
+
+
+Bu proje, teknik indikatörler ve bot stratejileri (DCA ve Grid botları) ile donatılmış bir kripto ya
+
+
+Bu proje, teknik indikatörler ve bot stratejileri (DCA ve Grid botları) ile donatılmış bir kri
+
+
+Bu proje, teknik indikatörler ve bot stratejileri (DCA ve Grid botları) ile donatılmış 
+
+
+Bu proje, teknik indikatörler ve bot stratejileri (DCA ve Grid botları) ile don
+
+
+Bu proje, teknik indikatörler ve bot stratejileri (DCA ve Grid botları)
+
+
+Bu proje, teknik indikatörler ve bot stratejileri (DCA ve Grid
+
+
+Bu proje, teknik indikatörler ve bot stratejileri (D
+
+
+Bu proje, teknik indikatörler ve bo
+
+
+Bu proje, teknik indikatörler
+
+
+Bu proje, teknik indik
+
+
+Bu proje, tekn
+
+
+Bu pr
+## Kurulum
+
+1. Gerekli kütüphaneleri yükleyin:
+   
+   
+```bash
+   pip install -r requirements.txt
+Docker imajını oluşturup çalıştırın:
+
+bash
+Kodu kopyala
+docker-compose up --build
+FastAPI arayüzü: `http://localhost:8000/docs
