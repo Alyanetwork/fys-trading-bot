@@ -1,0 +1,9 @@
+ccxt
+fastapi
+uvicorn
+pandas
+talib
+mplfinance
+plotly
+pydantic
+jinja2
