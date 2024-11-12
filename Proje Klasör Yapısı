@@ -1,0 +1,38 @@
+
+Aşağıda, Crypto Trading Bot projesinin tüm dosya yapısını ve her dosya için kısa açıklamaları bulabilirsiniz. Bu yapı, projeyi adım adım inşa etmenizi veya mevcut bir proje klasörünü doğrulamanızı kolaylaştırır.
+
+Proje Klasör Yapısı
+bash
+Kodu kopyala
+crypto_trading_bot/
+│
+├── app/                    # Ana uygulama dosyaları
+│   ├── __init__.py
+│   ├── main.py             # Uygulama başlangıç dosyası (FastAPI sunucu)
+│   ├── config.py           # API anahtarları, yapılandırma ayarları
+│   ├── routes/             # API rotaları (işlemler ve cüzdan için)
+│   │   ├── __init__.py
+│   │   ├── trading.py      # Bot işlemleri için API rotaları
+│   │   ├── wallet.py       # Cüzdan işlemleri için API rotaları
+│   │   └── charts.py       # Grafik gösterimleri için API rotaları
+│   ├── services/           # Bot servisleri ve iş mantığı
+│   │   ├── __init__.py
+│   │   ├── api_connector.py # Borsa bağlantıları
+│   │   ├── indicators.py    # Teknik indikatör hesaplamaları
+│   │   ├── bots.py          # Bot sınıfları (DCA, Grid, vb.)
+│   │   └── wallet_manager.py # Cüzdan yönetimi
+│   └── templates/          # HTML şablon dosyaları (kullanıcı arayüzü)
+│
+├── tests/                  # Test dosyaları
+│   ├── __init__.py
+│   ├── test_trading.py     # Bot testleri
+│   └── test_wallet.py      # Cüzdan testleri
+│
+├── requirements.txt        # Gerekli bağımlılıkları içeren dosya
+├── Dockerfile              # Docker yapılandırma dosyası
+├── docker-compose.yml      # Docker Compose dosyası
+├── README.md               # Proje genel açıklaması
+├── INSTALLATION.md         # Kurulum talimatları
+├── USAGE.md                # Botların kullanım talimatları
+├── API_REFERENCE.md        # API uç noktaları açıklaması
+└── LICENSE                 # Lisans dosyası (MIT, GPL, vb.)
