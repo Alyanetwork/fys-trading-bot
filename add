@@ -1,0 +1,92 @@
+# Gereken Kütüphaneleri Kur
+import ccxt
+import pandas as pd
+import talib
+import numpy as np
+import mplfinance as mpf
+from datetime import datetime, timedelta
+
+# 1. API bağlantısı
+class ExchangeAPI:
+    def __init__(self, api_key, secret_key, exchange_id='binance'):
+        self.exchange = getattr(ccxt, exchange_id)({
+            'apiKey': api_key,
+            'secret': secret_key,
+            'enableRateLimit': True
+        })
+        
+    def fetch_ohlcv(self, symbol='BTC/USDT', timeframe='1h', limit=100):
+        return self.exchange.fetch_ohlcv(symbol, timeframe=timeframe, limit=limit)
+    
+    def create_order(self, symbol, order_type, side, amount, price=None):
+        return self.exchange.create_order(symbol, order_type, side, amount, price)
+
+# 2. Teknik İndikatörler
+class TechnicalIndicators:
+    @staticmethod
+    def calculate_rsi(data, period=14):
+        return talib.RSI(np.array(data['close']), timeperiod=period)
+    
+    @staticmethod
+    def calculate_macd(data, fast_period=12, slow_period=26, signal_period=9):
+        macd, macdsignal, macdhist = talib.MACD(data['close'], fastperiod=fast_period, slowperiod=slow_period, signalperiod=signal_period)
+        return macd, macdsignal, macdhist
+
+# 3. Mum Grafikleri
+class CandlestickChart:
+    @staticmethod
+    def plot_candlestick(data):
+        data.index = pd.to_datetime(data['timestamp'], unit='ms')
+        mpf.plot(data, type='candle', volume=True)
+
+# 4. Bot Modülleri
+class DCABot:
+    def __init__(self, exchange, symbol, investment_amount, interval_hours):
+        self.exchange = exchange
+        self.symbol = symbol
+        self.investment_amount = investment_amount
+        self.interval_hours = interval_hours
+        self.last_investment_time = datetime.now() - timedelta(hours=interval_hours)
+
+    def execute(self):
+        if datetime.now() >= self.last_investment_time + timedelta(hours=self.interval_hours):
+            order = self.exchange.create_order(self.symbol, 'market', 'buy', self.investment_amount)
+            self.last_investment_time = datetime.now()
+            return order
+
+class GridBot:
+    def __init__(self, exchange, symbol, grid_levels, grid_size):
+        self.exchange = exchange
+        self.symbol = symbol
+        self.grid_levels = grid_levels
+        self.grid_size = grid_size
+        self.orders = []
+
+    def create_grid(self):
+        ticker = self.exchange.fetch_ticker(self.symbol)
+        price = ticker['last']
+        for i in range(self.grid_levels):
+            level_price = price + (i - self.grid_levels // 2) * self.grid_size
+            self.orders.append({'price': level_price, 'status': 'pending'})
+
+    def execute(self):
+        ticker = self.exchange.fetch_ticker(self.symbol)
+        price = ticker['last']
+        for order in self.orders:
+            if order['status'] == 'pending' and abs(order['price'] - price) < self.grid_size / 2:
+                self.exchange.create_order(self.symbol, 'limit', 'buy', 1, order['price'])
+                order['status'] = 'filled'
+
+# 5. Cüzdan Yönetimi
+class Wallet:
+    def __init__(self):
+        self.assets = {}
+
+    def update_asset(self, symbol, amount):
+        if symbol in self.assets:
+            self.assets[symbol] += amount
+        else:
+            self.assets[symbol] = amount
+
+    def get_balance(self):
+        return self.assets
