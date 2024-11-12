@@ -1,0 +1,9 @@
+Başlatma : Uygulamayı başlatmak için aşağıdaki komutu kullanın:
+
+vuruş
+
+Kodu kopyala
+uvicorn app.main:app --reload
+Arayüz : /docsburada FastAPI'nin otomatik olarak oluşturulmuş dokümantasyondan tüm API rotalarını görüntüleyebilirsiniz.
+
+Bu proje yapısı, yatırım botu için gerekli olan tüm modülleri içerir ve genişletilebilir bir altyapı sağlar. İndikatörler, botlar, bütçe yönetimi gibi işlemler tamamlanmıştır ve yeni borsalar veya bot yöntemleri kolayca eklenebilir.
