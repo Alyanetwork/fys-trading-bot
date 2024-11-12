@@ -1,0 +1,124 @@
+FYS Ticaret Botu
+FYS Trading Bot , kripto para piyasalarında otomatik alım-satım şeması yürüten, API Profili, teknik analiz göstergeleri ve kolay kullanıcı arayüzü seçenekleri sunan Python tabanlı bir ticaret botudur. FYS Trading Bot, kullanıcıların DCA ve Grid gibi popüler uygulamaların uygulanmasını sağlar ve Docker desteğiyle hızlı bir şekilde kurulup çalıştırılabilir.
+
+Özellikler
+DCA (Dolar Maliyet Ortalaması) Bot : Zaman aralıklarına göre belirli ayrı kripto alımını otomatik olarak gerçekleştirir.
+Grid Bot : Fiyat seviyelerine göre alım-satım işlemlerini gerçekleştirerek volatil piyasa hareketlerinden kar elde etme işlemlerini gerçekleştirir.
+Teknik İndikatörler : RSI, MACD, Bollinger Bantları gibi klasik indikatörler içerir.
+API Entegrasyonu : ccxtBinance gibi kripto borsalarına kolayca bağlanır.
+Cüzdan Yönetimi : Cüzdan bakiyelerini güncel olarak takip eder ve gösterir.
+Docker Uyumluluğu : Kolay finansal ve hızlı kurulum için Docker desteği sunar.
+Gereksinimler
+Python : 3.8 veya üzeri
+Docker : (Opsiyonel) Eğer Docker üzerinden çalıştırılıyorsa isteniyorsa
+Kripto Borsası API Anahtarları : Örneğin, Binance API bilgileri
+1. Kurulum
+1.1. Bağımlılıkları Yükleyin
+Proje yazılımının kurulumu için kök dizinde aşağıdaki çalıştırma başlatılır:
+
+vuruş
+
+Kodu kopyala
+pip install -r requirements.txt
+1.2. Çevre değişkenlerini ayarlayın
+API anahtarlarınızı güvenli bir şekilde ayarlamak için app/config.pyparçaları veya çevre değişkenleriyle birlikte saklanır. Örnek bir bilgiler için config.pyaşağıdaki gibi olabilir:
+
+piton
+
+Kodu kopyala
+import os
+
+class Config:
+    API_KEYS = {
+        "binance": {
+            "api_key": os.getenv("BINANCE_API_KEY"),
+            "secret": os.getenv("BINANCE_SECRET_KEY"),
+        }
+    }
+    DEFAULT_SYMBOL = 'BTC/USDT'
+    DEFAULT_EXCHANGE = 'binance'
+Not : API'yi doğrudan koda yazmak yerine güvenlik nedeniyle çevre değişkenleriyle kullanmayı tercih edin.
+
+1.3. Docker ile Çalıştırma (Opsiyonel)
+FYS Trading Bot'u Docker konteyneri olarak çalıştırmak için aşağıdaki adımları izleyin:
+
+Docker'ın kuruluşundan emin olun.
+
+Aşağıdaki komutla Docker konteynerini çalıştırın:
+
+vuruş
+
+Kodu kopyala
+docker-compose up --build
+Docker başarıyla başarıldığında, API'yi http://localhost:8000/docsgözden geçirebilirsiniz.
+
+2. Kullanım
+FYS Trading Bot'un API uç noktalarını http://localhost:8000/docsbulabilirsiniz. Bu dokümantasyon, botları başlatma, durdurma ve saklamayı sorgulama gibi işlevler için tüm API uç noktalarını içerir.
+
+2.1. Örnek API Kullanımları
+DCA Botu Başlatma :
+
+Bağlantı adresi:/trade/dca/
+Parametreler: symbol, investment_amount,interval_hours
+Örnek: DCA botunu 1 saatlik aralıklarla çalıştırmak için bu uç noktayı kullanabilirsiniz.
+Grid Botu Başlatma :
+
+Bağlantı adresi:/trade/grid/
+Parametreler: symbol, grid_levels,grid_size
+Açıklama: Grid botunu, belirli fiyat seviyelerinde otomatik alım-satım yapmak için başlatır.
+Cüzdan Bakiyesi Görüntüleme :
+
+Bağlantı adresi:/wallet/
+Açıklama: Kullanıcının bütçesindeki güncel kripto varlıkları ve bakiyeleri görüntülenir.
+3. Geliştirme
+3.1. Proje Yapısı
+Projenin ana yapısı aşağıdaki gibidir:
+
+vuruş
+
+Kodu kopyala
+fys_trading_bot/
+│
+├── app/                    # Ana uygulama dosyaları
+│   ├── __init__.py
+│   ├── main.py             # Uygulama başlangıç dosyası
+│   ├── config.py           # Yapılandırma ve API anahtarları
+│   ├── routes/             # API rotaları
+│   ├── services/           # Bot servisleri ve iş mantığı
+│   └── templates/          # HTML şablon dosyaları
+│
+├── tests/                  # Test dosyaları
+├── requirements.txt        # Python bağımlılıkları
+├── Dockerfile              # Docker yapılandırma dosyası
+├── docker-compose.yml      # Docker Compose dosyası
+└── README.md               # Proje genel açıklaması
+3.2. Ana Dosya Açıklamalarının
+app/main.py : FastAPI çalışmasını başlatır ve API rotalarını yükler.
+app/routes/trading.py : Bot işlemleri için API uç noktalarını içerir.
+app/routes/wallet.py : Cüzdan bakiyesini sorgulamak için API uç noktasını sağlar.
+app/services/bots.py : DCA ve Grid botlarının mantığını içerir.
+app/services/indicators.py : Teknik analiz indikatörlerini hesapları.
+Dockerfile : Projenin Docker'ın üzerinde çalıştırılması için gerekli komutları içerir.
+docker-compose.yml : Docker Compose ayarları, Docker konteynerini kolayca çalıştırmak için kullanılır.
+4. Test ve Geriye Dönük Testi (Geriye Dönük Test)
+4.1. Test edici
+Projenin düzgün çalışmasından emin olmak için testssisteminde yer alan testler çalıştırılır. Örneğin:
+
+vuruş
+
+Kodu kopyala
+pytest tests/
+4.2. Geriye Dönük Testi (Geri Test)
+FYS Trading Botu, geliştirilmiş yeni sistemlerin gözden geçirilmesi amacıyla geriye dönük testlerin uygulanmasını sağlar. Örnek olarak, fiyat politikalarının bir CSV dosyasından yüklenebilir ve her bir stratejiyi geçmiş verilerle test edebilirsiniz.
+
+5. Katkıda Bulunma
+FYS Trading Bot projesinin oluşturulması için aşağıdaki adımları takip edin:
+
+Projeyi çatal edin.
+Yeni bir dal bileşimi ( feature/my-feature).
+Çekme isteği gönder.
+Lütfen katkı yaparken kod stiline ve PEP8'in sadeleştirilmesine dikkat edin.
+
+Lisans
+Bu proje MIT Lisansı altında lisanslanmıştır.
+
