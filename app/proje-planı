@@ -1,0 +1,28 @@
+crypto_trading_bot/
+│
+├── app/
+│   ├── __init__.py
+│   ├── main.py
+│   ├── config.py
+│   ├── routes/
+│   │   ├── __init__.py
+│   │   ├── trading.py
+│   │   ├── wallet.py
+│   │   └── charts.py
+│   ├── services/
+│   │   ├── __init__.py
+│   │   ├── api_connector.py
+│   │   ├── indicators.py
+│   │   ├── bots.py
+│   │   └── wallet_manager.py
+│   └── templates/
+│
+├── tests/
+│   ├── __init__.py
+│   ├── test_trading.py
+│   └── test_wallet.py
+│
+├── requirements.txt
+├── Dockerfile               # Docker yapılandırma dosyası
+├── docker-compose.yml       # Docker Compose dosyası
+└── README.md
